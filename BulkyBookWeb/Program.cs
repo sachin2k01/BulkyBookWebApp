@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using RepositoryLayer.Context;
+
+
 namespace BulkyBookWeb
 {
     public class Program
@@ -8,6 +12,13 @@ namespace BulkyBookWeb
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            //any dependecy injection should be done here within Build(), regester database, email,etc...,  
+
+            builder.Services.AddDbContext<BulkyDBContext>(
+                x => x.UseSqlServer(builder.Configuration["connectionString:BookDB"])
+               );
+
+           // x => x.UseSqlServer(builder.Configuration["connectionString:BookDB"])
 
             var app = builder.Build();
 
@@ -28,7 +39,7 @@ namespace BulkyBookWeb
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=actionResult}/{id?}");
 
             app.Run();
         }
